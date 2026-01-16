@@ -1,0 +1,14 @@
+name: Keep Render Awake 🤡
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Poke the backend 👀
+        run: |
+          curl -I https://furry-classifier.onrender.com/ || true
