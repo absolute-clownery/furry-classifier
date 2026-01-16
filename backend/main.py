@@ -25,6 +25,10 @@ def load_model():
 
 model = load_model()
 
+with torch.no_grad():
+    dummy = torch.zeros(1, 3, 224, 224)
+    model(dummy)
+
 # ---------- Transform ----------
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
