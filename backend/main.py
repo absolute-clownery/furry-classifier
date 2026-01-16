@@ -6,15 +6,19 @@ from torchvision.models import resnet18
 from torchvision import transforms
 from PIL import Image
 import io
+import os
 
 DEVICE = "cpu"
 
 # ---------- Model ----------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "furry_detector.pt")
+
 def load_model():
     model = resnet18(weights=None)
     model.fc = nn.Linear(model.fc.in_features, 1)
     model.load_state_dict(
-        torch.load("furry_detector.pt", map_location=DEVICE)
+        torch.load(MODEL_PATH, map_location=DEVICE)
     )
     model.eval()
     return model
