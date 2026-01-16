@@ -1,0 +1,12 @@
+.
+|-- backend
+|   |-- __pycache__
+|   |   `-- main.cpython-313.pyc
+|   |-- furry_detector.pt
+|   `-- main.py
+|-- folder-structure.txt
+|-- index.html
+|-- script.js
+`-- style.css
+
+2 directories, 7 files

@@ -1,0 +1,91 @@
+* {
+    box-sizing: border-box;
+    font-family: "Comic Sans MS", "Arial", sans-serif;
+  }
+  
+  body {
+    background: #0f0f0f;
+    color: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .container {
+    background: #1a1a1a;
+    border: 3px dashed #ff4d4d;
+    padding: 30px;
+    width: 420px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
+  }
+  
+  h1 {
+    margin-bottom: 5px;
+  }
+  
+  .subtitle {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-bottom: 20px;
+  }
+  
+  .upload-box {
+    border: 2px dashed #888;
+    padding: 20px;
+    margin-bottom: 15px;
+    cursor: pointer;
+  }
+  
+  .upload-box input {
+    display: none;
+  }
+  
+  .upload-box label {
+    cursor: pointer;
+    color: #aaa;
+  }
+  
+  button {
+    background: #ff4d4d;
+    border: none;
+    padding: 12px 20px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+  
+  button:hover {
+    background: #ff1a1a;
+  }
+  
+  .result {
+    border-top: 1px solid #333;
+    padding-top: 15px;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .label, .confidence {
+    font-weight: bold;
+  }
+  
+  .roast {
+    margin-top: 10px;
+    font-size: 1.1rem;
+    color: #ffb347;
+  }
+
+  .filename {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin-bottom: 15px;
+    font-style: italic;
+  }
+  

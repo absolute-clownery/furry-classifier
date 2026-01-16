@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ROBLOX Furry Detector 🤡</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container">
+    <h1>ROBLOX Furry Detector 🤡</h1>
+    <p class="subtitle">Written by a furry. Powered by vibes.</p>
+
+    <div class="upload-box">
+        <input type="file" id="imageInput" accept="image/*" />
+        <label for="imageInput">Upload your avatar 🦊</label>
+      </div>
+      
+      <p class="filename" id="fileName">No image uploaded</p>
+      
+    <button id="classifyBtn">Classify 🤡</button>
+
+    <div class="result hidden" id="resultBox">
+      <p class="label">Label: <span id="label"></span></p>
+      <p class="confidence">Confidence: <span id="confidence"></span></p>
+      <p class="roast" id="roast"></p>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
