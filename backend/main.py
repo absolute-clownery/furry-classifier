@@ -51,33 +51,28 @@ async def wake():
 
 @app.post("/classify")
 async def classify(file: UploadFile = File(...)):
-    if not file.content_type.startswith("image/"):
-        raise HTTPException(
-            status_code=400,
-            detail="Not an image"
-        )
-
-    image_bytes = await file.read()
-
     try:
+        if not file.content_type.startswith("image/"):
+            raise HTTPException(status_code=400, detail="Not an image")
+
+        image_bytes = await file.read()
         image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-    except:
-        raise HTTPException(
-            status_code=400,
-            detail="Corrupted image"
-        )
 
-    img_tensor = transform(image).unsqueeze(0)
+        img_tensor = transform(image).unsqueeze(0)
 
-    with torch.no_grad():
-        logits = model(img_tensor)
-        prob = torch.sigmoid(logits).item()
+        with torch.no_grad():
+            logits = model(img_tensor)
+            prob = torch.sigmoid(logits).item()
 
-        label = "FURRY" if prob >= 0.5 else "NOT_FURRY"
-        confidence = abs(prob - 0.5) * 2
+            label = "FURRY" if prob >= 0.5 else "NOT_FURRY"
+            confidence = abs(prob - 0.5) * 2
 
-    return {
-        "label": label,
-        "confidence": round(confidence, 3),
-        "raw_prob": round(prob, 3)  # optional but useful
-    }
+        return {
+            "label": label,
+            "confidence": round(confidence, 3),
+            "raw_prob": round(prob, 3)
+        }
+
+    except Exception as e:
+        print("🤡 CLASSIFY CRASHED:", repr(e))
+        raise HTTPException(status_code=500, detail="Classifier exploded")

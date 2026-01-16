@@ -1,3 +1,28 @@
+const RENDER_API = "https://furry-classifier.onrender.com/classify";
+const LOCAL_API  = "http://127.0.0.1:8000/classify";
+
+function postWithFallback(formData) {
+  return fetch(RENDER_API, {
+    method: "POST",
+    body: formData
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Render rejected image");
+      return res.json();
+    })
+    .catch(err => {
+      console.warn("🤡 Render down, switching to localhost...", err);
+
+      return fetch(LOCAL_API, {
+        method: "POST",
+        body: formData
+      }).then(res => {
+        if (!res.ok) throw new Error("Local backend rejected image");
+        return res.json();
+      });
+    });
+}
+
 const classifyBtn = document.getElementById("classifyBtn");
 const imageInput = document.getElementById("imageInput");
 const fileNameEl = document.getElementById("fileName");
@@ -17,27 +42,21 @@ classifyBtn.addEventListener("click", () => {
     return;
   }
 
-  // 🤡 FAKE BACKEND RESPONSE
   const file = imageInput.files[0];
   const formData = new FormData();
   formData.append("file", file);
-  
-  fetch("http://127.0.0.1:8000/classify", {
-    method: "POST",
-    body: formData
-  })
-    .then(res => {
-      if (!res.ok) throw new Error("Backend rejected image");
-      return res.json();
-    })
+
+  postWithFallback(formData)
     .then(data => {
       showResult(data.label, data.confidence, data.raw_prob);
     })
     .catch(err => {
       roastEl.textContent = "💥 Backend exploded. CNN rage quit.";
       resultBox.classList.remove("hidden");
+      console.error(err);
     });
 });
+
 
 imageInput.addEventListener("change", () => {
     if (!imageInput.files.length) return;
