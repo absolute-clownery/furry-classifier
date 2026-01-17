@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Poke the backend 👀
         run: |
-          curl -I https://furry-classifier.onrender.com/ || true
+          curl https://furry-classifier.onrender.com/ping || true
