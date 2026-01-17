@@ -1,27 +1,29 @@
+const DEV = false; // 🤡 flip this when deploying
+
 const RENDER_API = "https://furry-classifier.onrender.com/classify";
 const LOCAL_API  = "http://127.0.0.1:8000/classify";
 
-function postWithFallback(formData) {
-  return fetch(RENDER_API, {
+const API_ENDPOINT = DEV ? LOCAL_API : RENDER_API;
+
+console.log(
+  DEV
+    ? "🤡 DEV MODE: using LOCAL backend + experimental .pt"
+    : "🚀 PROD MODE: using Render backend + committed .pt"
+);
+
+function postImage(formData) {
+  return fetch(API_ENDPOINT, {
     method: "POST",
     body: formData
-  })
-    .then(res => {
-      if (!res.ok) throw new Error("Render rejected image");
-      return res.json();
-    })
-    .catch(err => {
-      console.warn("🤡 Render down, switching to localhost...", err);
-
-      return fetch(LOCAL_API, {
-        method: "POST",
-        body: formData
-      }).then(res => {
-        if (!res.ok) throw new Error("Local backend rejected image");
-        return res.json();
-      });
-    });
+  }).then(res => {
+    if (!res.ok) {
+      throw new Error(`Backend rejected image (${res.status})`);
+    }
+    return res.json();
+  });
 }
+
+const statusText = document.getElementById("statusText");
 
 const classifyBtn = document.getElementById("classifyBtn");
 const imageInput = document.getElementById("imageInput");
@@ -36,26 +38,39 @@ const allowedImages = [
     "png", "jpg", "jpeg", "jfif", "webp"
   ];
 
-classifyBtn.addEventListener("click", () => {
-  if (!imageInput.files.length) {
-    alert("Upload an image first 🤡");
-    return;
-  }
-
-  const file = imageInput.files[0];
-  const formData = new FormData();
-  formData.append("file", file);
-
-  postWithFallback(formData)
-    .then(data => {
-      showResult(data.label, data.confidence, data.raw_prob);
-    })
-    .catch(err => {
-      roastEl.textContent = "💥 Backend exploded. CNN rage quit.";
-      resultBox.classList.remove("hidden");
-      console.error(err);
-    });
-});
+  classifyBtn.addEventListener("click", () => {
+    if (!imageInput.files.length) {
+      alert("Upload an image first 🤡");
+      return;
+    }
+  
+    const file = imageInput.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+  
+    // 👇 ENTER JUDGMENT MODE
+    classifyBtn.disabled = true;
+    classifyBtn.textContent = "Judging...";
+    statusText.classList.remove("hidden");
+    resultBox.classList.add("hidden");
+  
+    postImage(formData)
+      .then(data => {
+        showResult(data.label, data.confidence, data.raw_prob);
+      })
+      .catch(err => {
+        roastEl.textContent = "💥 Backend exploded. CNN rage quit.";
+        resultBox.classList.remove("hidden");
+        console.error(err);
+      })
+      .finally(() => {
+        // 👇 EXIT JUDGMENT MODE
+        classifyBtn.disabled = false;
+        classifyBtn.textContent = "Classify 🤡";
+        statusText.classList.add("hidden");
+      });
+  });
+  
 
 
 imageInput.addEventListener("change", () => {

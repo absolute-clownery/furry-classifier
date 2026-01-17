@@ -89,3 +89,16 @@
     font-style: italic;
   }
   
+  .status {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    color: #ffb347;
+    animation: pulse 1.2s infinite;
+  }
+  
+  @keyframes pulse {
+    0%   { opacity: 0.4; }
+    50%  { opacity: 1; }
+    100% { opacity: 0.4; }
+  }
+  
