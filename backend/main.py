@@ -54,9 +54,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.head("/")
-async def wake():
-    return Response(status_code=200)
+@app.get("/ping")
+async def ping():
+    return {"status": "🤡 honk"}
 
 @app.post("/classify")
 async def classify(file: UploadFile = File(...)):
